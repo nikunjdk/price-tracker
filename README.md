@@ -8,6 +8,7 @@ Install poetry by following these [steps](https://python-poetry.org/docs/#instal
 
 ```
 poetry install
+poetry run python price_tracker
 ```
 
 ### For Developers
