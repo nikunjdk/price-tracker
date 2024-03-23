@@ -7,11 +7,10 @@ import logging
 from parse_competitors_web_details import parse_competitors_web_details
 
 
-log = logging.getLogger("price-tracker.get_competitors_details")
-
-
 def get_competitors_details(product_url: str) -> pd.DataFrame:
+    log = logging.getLogger("price_tracker.get_competitors_details")
     try:
+        log.debug("Getting competitor details")
         # Modifying competitors url from product url
         competitors_url = re.sub(".html.*", "/all_sellers.html", product_url)
 

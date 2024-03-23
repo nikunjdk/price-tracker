@@ -2,7 +2,7 @@ import logging
 from bs4 import Tag
 from typing import List
 
-log = logging.getLogger("price-tracker.parse_competitors_web_details")
+log = logging.getLogger("price_tracker.parse_competitors_web_details")
 
 
 def parse_competitors_web_details(competitors_url: str, competitors_url_soup) -> List:

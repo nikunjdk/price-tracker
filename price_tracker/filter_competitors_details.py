@@ -1,3 +1,4 @@
+import logging
 from typing import List
 import pandas as pd
 
@@ -5,6 +6,8 @@ import pandas as pd
 def filter_competitors_details(
     competitors_details: pd.DataFrame, delivery_locations: List[str]
 ) -> pd.DataFrame:
+    log = logging.getLogger("price_tracker.filter_competitors_details")
+    log.debug("Filtering competitor details")
     # Select relevant columns
     relevant_columns = [
         "Offer Price",
