@@ -18,10 +18,13 @@ def filter_competitors_details(
     competitors_details = competitors_details[relevant_columns]
 
     # Filter by delivery locations
-    delivery_locations_regex = "|".join(delivery_locations)
-    competitors_details = competitors_details[
-        competitors_details["Delivery Locations"].str.contains(delivery_locations_regex)
-    ]
+    if len(delivery_locations) != 0:
+        delivery_locations_regex = "|".join(delivery_locations)
+        competitors_details = competitors_details[
+            competitors_details["Delivery Locations"].str.contains(
+                delivery_locations_regex
+            )
+        ]
 
     # Convert Offer Price to float
     competitors_details["Offer Price"] = competitors_details["Offer Price"].str[1:]

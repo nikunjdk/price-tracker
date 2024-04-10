@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "price-tracker"
-version = "0.1.0"
+version = "0.2.0"
 description = "Price tracker for GEM Portal"
 authors = ["Nikunj Das Kasat <nikunjdaskasat@gmail.com>"]
 readme = "README.md"
