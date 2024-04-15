@@ -10,7 +10,7 @@ def sample_competitors_details():
     # Create a sample DataFrame with relevant data
     data = {
         "Offer Price": ["$100.00", "$800,000.12", "$120"],
-        "Delivery Locations": ["USA", "Canada", "Mexico"],
+        COLUMN_PRODUCT_DELIVERY_LOCATIONS: ["USA", "Canada", "Mexico"],
         "Quantity based Discount": ["", "8 to 99 units = $1,110", ""],
         "Min Quantity / Consignee": [10, 5000, 15],
     }

@@ -1,3 +1,6 @@
+import pandas as pd
+
+
 def is_delivery_location(delivery_location: str) -> bool:
     delivery_locations = (
         "ANDHRA PRADESH",
@@ -39,3 +42,15 @@ def is_delivery_location(delivery_location: str) -> bool:
         "All India",
     )
     return delivery_location in delivery_locations
+
+
+def process_delivery_locations(
+    delivery_location: pd.Series, default_locations: list[str]
+) -> list[str]:
+    if not delivery_location:
+        return default_locations
+    locations = delivery_location.split(", ")
+    for loc in locations:
+        if not is_delivery_location(loc):
+            raise ValueError(f"Invalid delivery location: {loc}")
+    return locations

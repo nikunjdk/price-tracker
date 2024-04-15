@@ -5,8 +5,11 @@ description = "Price tracker for GEM Portal"
 authors = ["Nikunj Das Kasat <nikunjdaskasat@gmail.com>"]
 readme = "README.md"
 
+[tool.poetry.scripts]
+start = "price_tracker.__main__:main"
+
 [tool.poetry.dependencies]
-python = "^3.12"
+python = ">=3.12,<3.13"
 beautifulsoup4 = "^4.12.3"
 pandas = "^2.2.1"
 requests = "^2.31.0"
@@ -20,6 +23,7 @@ optional = true
 [tool.poetry.group.dev.dependencies]
 black = "^24.2.0"
 ipykernel = "^6.29.3"
+poetry-pyinstaller-plugin = "^1.1.8"
 
 [tool.poetry.group.test]
 optional = true
@@ -34,6 +38,9 @@ optional = true
 
 [tool.poetry.group.docs.dependencies]
 sphinx = "*"
+
+[tool.poetry-pyinstaller-plugin.scripts]
+price-tracker = "price_tracker/__main__.py"
 
 [build-system]
 requires = ["poetry-core"]

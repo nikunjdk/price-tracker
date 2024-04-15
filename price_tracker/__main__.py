@@ -1,22 +1,40 @@
-import os
 from datetime import datetime
 from tqdm import tqdm
-from get_products import get_products_from_excel
-from init_argparse import init_argparse
-from setup_logging import setup_logging
-from process_product import process_product
 from multiprocessing import Pool, cpu_count
-from functools import partial
+from price_tracker.const import COLUMN_PRODUCT_MINIMUM_PRICE
+from price_tracker.delivery_location import is_delivery_location
+from price_tracker.get_products import get_products_from_excel, get_products_from_params
+from price_tracker.parse_args import parse_args
+from price_tracker.setup_logging import setup_logging
+from price_tracker.get_min_competitor_price import get_min_competitor_price
+from price_tracker.write_to_excel import write_to_excel
 
 
-def main():
+def main() -> None:
     try:
         current_date_time = datetime.now().strftime("%Y%m%d-%H%M%S")
         log_file_name = "logs/price_tracker_%s.log" % current_date_time
         log = setup_logging(log_file_name)
 
-        excel_file_name = "Gem comparison products copy.xlsx"
-        products = get_products_from_excel(excel_file_name)
+        args = parse_args()
+
+        if len(args.delivery_locations) != 0:
+            for delivery_loaction in args.delivery_locations:
+                if is_delivery_location(delivery_loaction) == False:
+                    raise ValueError("Invalid delivery location")
+
+        products = (
+            get_products_from_excel(
+                args.excel_file_path, args.quantity, args.delivery_locations
+            )
+            if args.excel_file_path is not None
+            else get_products_from_params(
+                args.product_url,
+                args.current_price,
+                args.quantity,
+                args.delivery_locations,
+            )
+        )
 
         # Create a multiprocessing Pool
         pool = Pool(cpu_count())
@@ -25,7 +43,8 @@ def main():
         min_competitor_prices = list(
             tqdm(
                 pool.imap(
-                    process_product, [product for _, product in products.iterrows()]
+                    get_min_competitor_price,
+                    [product for _, product in products.iterrows()],
                 ),
                 total=len(products),
                 desc="Number of products processed",
@@ -37,21 +56,12 @@ def main():
         pool.join()
 
         log.debug("Finished processing all products")
-        products["MINIMUM PRICE"] = min_competitor_prices
-        if not os.path.exists("results"):
-            os.mkdir("results")
-        products.to_excel(
-            f"results/price_tracker_{current_date_time}.xlsx",
-            index=False,
-            header=["URL", "CURRENT PRICE", "MINIMUM PRICE"],
-        )
+        products[COLUMN_PRODUCT_MINIMUM_PRICE] = min_competitor_prices
+        write_to_excel(current_date_time, products)
 
     except Exception as e:
         log.error(e, exc_info=True)
 
 
 if __name__ == "__main__":
-    # Initialize parser
-    parser = init_argparse()
-    args = parser.parse_args()
     main()

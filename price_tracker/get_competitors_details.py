@@ -3,8 +3,7 @@ from bs4 import BeautifulSoup
 import pandas as pd
 import requests
 import logging
-
-from parse_competitors_web_details import parse_competitors_web_details
+from price_tracker.parse_competitors_web_details import parse_competitors_web_details
 
 
 def get_competitors_details(product_url: str) -> pd.DataFrame:
